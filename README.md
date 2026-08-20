@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Rajdhani:wght@500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
 
 <script src="https://pl27855590.effectivecpmnetwork.com/81/86/d7/8186d7fd62c29f561c8d23a95bd7221d.js"></script>
+<script src="https://pl27856975.effectivecpmnetwork.com/0e/4b/18/0e4b185002c0946f1be225b85ebe12c3.js"></script>
 
 
 
