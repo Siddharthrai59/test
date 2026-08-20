@@ -49,15 +49,15 @@
   .live-dot{ width:8px; height:8px; border-radius:50%; background:#3fe07f; box-shadow:0 0 8px #3fe07f; animation:dotPulse 1.6s ease-in-out infinite; }
   @keyframes dotPulse{ 0%,100%{opacity:1;} 50%{opacity:0.4;} }
 
-  .top-toggles{ display:flex; gap:8px; }
+  .top-toggles{ display:flex; gap:4px; background:rgba(20,14,32,0.55); padding:4px; border-radius:24px; border:1px solid var(--panel-line); backdrop-filter:blur(8px); }
   .toggle-btn{
     font-family:'Rajdhani', sans-serif; font-weight:700; font-size:13px; letter-spacing:0.5px;
-    background:rgba(42,32,56,0.55); color:var(--text); border:1.5px solid var(--panel-line);
-    padding:9px 18px; border-radius:22px; cursor:pointer; backdrop-filter:blur(6px);
-    transition:background .15s ease, transform .15s ease;
+    background:transparent; color:var(--text); border:none;
+    padding:8px 16px; border-radius:20px; cursor:pointer;
+    transition:background .2s ease, color .2s ease;
   }
-  .toggle-btn.active{ background:linear-gradient(135deg, var(--gold-bright), var(--coral)); color:#3a1e10; border-color:transparent; }
-  .toggle-btn:hover{ transform:translateY(-1px); }
+  .toggle-btn.active{ background:linear-gradient(135deg, var(--gold-bright), var(--coral)); color:#3a1e10; box-shadow:0 3px 12px rgba(255,150,90,0.4); }
+  .toggle-btn:hover:not(.active){ background:rgba(255,255,255,0.08); }
 
   /* ---------------- Hero ---------------- */
   .hero{
@@ -82,11 +82,18 @@
   }
   .now-pill{
     pointer-events:auto;
-    display:inline-flex; align-items:center; gap:8px;
-    background:rgba(42,32,56,0.55); border:1px solid var(--panel-line); backdrop-filter:blur(6px);
-    padding:8px 18px; border-radius:22px; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:#fff6e9;
+    display:inline-flex; align-items:center; gap:10px;
+    background:rgba(20,14,32,0.55); border:1px solid var(--panel-line); backdrop-filter:blur(8px);
+    padding:9px 20px; border-radius:22px; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:#fff6e9;
     max-width:80vw;
   }
+  .eq-bars{ display:flex; align-items:flex-end; gap:2px; height:14px; }
+  .eq-bars span{ width:3px; background:var(--gold-bright); border-radius:2px; animation:eqBounce 0.9s ease-in-out infinite; }
+  .eq-bars span:nth-child(1){ height:40%; animation-delay:0s; }
+  .eq-bars span:nth-child(2){ height:100%; animation-delay:.15s; }
+  .eq-bars span:nth-child(3){ height:65%; animation-delay:.3s; }
+  .eq-bars span:nth-child(4){ height:85%; animation-delay:.45s; }
+  @keyframes eqBounce{ 0%,100%{ transform:scaleY(0.4); } 50%{ transform:scaleY(1); } }
   #nowPillText{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:inline-block; max-width:60vw; vertical-align:bottom; }
 
   /* ---------------- All Songs slide-up panel ---------------- */
@@ -112,12 +119,13 @@
 
   /* ---------------- Bottom player bar ---------------- */
   .player-bar{
-    position:fixed; left:14px; right:14px; bottom:14px; z-index:35;
+    position:fixed; left:0; right:0; bottom:14px; z-index:35;
+    width:calc(100% - 28px); max-width:760px; margin:0 auto;
     background:rgba(26,19,40,0.72); backdrop-filter:blur(20px) saturate(140%);
     border:1px solid rgba(255,207,122,0.25);
-    border-radius:22px;
+    border-radius:24px;
     padding:14px 20px 16px;
-    box-shadow:0 14px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
+    box-shadow:0 14px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06), 0 0 0 1px rgba(255,122,92,0.08);
   }
   .seek-row{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
   .time-label{ font-family:'Teko', sans-serif; font-size:13px; color:#e6dcc9; width:36px; text-align:center; flex-shrink:0; }
@@ -250,7 +258,7 @@
   <div class="hero-badge">YO YO</div>
   <div class="hero-title">Yo Yo Adda</div>
   <div class="hero-sub">Honey Singh Era · Non-Stop</div>
-  <div class="now-pill">▶ <span id="nowPillText">Loading...</span></div>
+  <div class="now-pill"><span class="eq-bars"><span></span><span></span><span></span><span></span></span> <span id="nowPillText">Loading...</span></div>
 </div>
 
 <div class="songs-panel" id="songsPanel">
@@ -324,20 +332,13 @@ function onPlayerReady(e){
   isReady = true;
   try{ player.setShuffle(true); }catch(err){}
   try{ player.setPlaybackQuality('hd1080'); }catch(err){}
-  // Try to play with sound right away. Most browsers allow this once the
-  // page has any engagement; if blocked, we silently fall back to muted
-  // and unmute on the very first tap/click anywhere on the page.
-  try{
-    player.unMute();
-    player.setVolume(70);
-    isMuted = false;
-  }catch(err){}
+  // IMPORTANT: browsers only allow autoplay when the video starts MUTED.
+  // Unmuting before/at play time blocks autoplay entirely (forces a manual
+  // click). So we keep it muted here for guaranteed autoplay, and unmute
+  // automatically the instant the user interacts with the page at all
+  // (see silentUnmuteOnFirstTouch below) — no visible button needed.
   player.playVideo();
   updateVolUI(70);
-  setTimeout(()=>{
-    // If browser silently blocked unmuted autoplay, it will report muted here.
-    try{ if(player.isMuted()) isMuted = true; }catch(err){}
-  }, 400);
   setTimeout(tryBuildSongsPanel, 1500);
 }
 
