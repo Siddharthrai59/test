@@ -256,7 +256,7 @@
 
 <div class="hero" id="heroView">
   <div class="hero-badge">YO YO</div>
-  <div class="hero-title">Yo Yo Adda</div>
+  <div class="hero-title">Yo Yo Honey Singh</div>
   <div class="hero-sub">Honey Singh Era · Non-Stop</div>
   <div class="now-pill"><span class="eq-bars"><span></span><span></span><span></span><span></span></span> <span id="nowPillText">Loading...</span></div>
 </div>
