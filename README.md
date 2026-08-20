@@ -110,56 +110,53 @@
   .song-title{ font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .song-idx{ font-size:11px; color:#c9bfe0; }
 
-  /* ---------------- Sound banner ---------------- */
-  .sound-banner{
-    position:fixed; top:90px; left:50%; transform:translateX(-50%); z-index:40;
-    background:linear-gradient(135deg, var(--gold-bright), var(--coral)); color:#3a1e10;
-    font-family:'Baloo 2', sans-serif; font-weight:700; font-size:14px;
-    padding:12px 22px; border-radius:26px; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,0.35);
-    display:flex; align-items:center; gap:8px; animation:bob 1.4s ease-in-out infinite;
-  }
-  @keyframes bob{ 0%,100%{ transform:translateX(-50%) translateY(0); } 50%{ transform:translateX(-50%) translateY(-5px); } }
-  .sound-banner.hidden{ display:none; }
-
   /* ---------------- Bottom player bar ---------------- */
   .player-bar{
-    position:fixed; left:0; right:0; bottom:0; z-index:35;
-    background:rgba(24,18,36,0.88); backdrop-filter:blur(14px);
-    border-top:1px solid var(--panel-line);
-    padding:12px 18px 16px;
+    position:fixed; left:14px; right:14px; bottom:14px; z-index:35;
+    background:rgba(26,19,40,0.72); backdrop-filter:blur(20px) saturate(140%);
+    border:1px solid rgba(255,207,122,0.25);
+    border-radius:22px;
+    padding:14px 20px 16px;
+    box-shadow:0 14px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
   }
-  .seek-row{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-  .time-label{ font-family:'Teko', sans-serif; font-size:13px; color:#e6dcc9; width:38px; text-align:center; flex-shrink:0; }
-  .seek-track{ flex:1; height:5px; border-radius:3px; background:rgba(255,255,255,0.15); position:relative; cursor:pointer; }
+  .seek-row{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .time-label{ font-family:'Teko', sans-serif; font-size:13px; color:#e6dcc9; width:36px; text-align:center; flex-shrink:0; }
+  .seek-track{ flex:1; height:5px; border-radius:3px; background:rgba(255,255,255,0.12); position:relative; cursor:pointer; }
+  .seek-track:hover{ height:7px; }
   .seek-fill{ position:absolute; left:0; top:0; height:100%; border-radius:3px; background:linear-gradient(90deg, var(--gold), var(--coral)); width:0%; }
-  .seek-thumb{ position:absolute; top:50%; width:13px; height:13px; border-radius:50%; background:var(--gold-bright); box-shadow:0 0 6px rgba(0,0,0,0.5); transform:translate(-50%,-50%); left:0%; }
+  .seek-thumb{ position:absolute; top:50%; width:13px; height:13px; border-radius:50%; background:var(--gold-bright); box-shadow:0 0 8px rgba(255,207,122,0.7), 0 2px 4px rgba(0,0,0,0.4); transform:translate(-50%,-50%); left:0%; }
 
   .controls-row{ display:flex; align-items:center; gap:16px; }
-  .art-thumb{ width:52px; height:52px; border-radius:10px; object-fit:cover; flex-shrink:0; background:#4a3d63; box-shadow:0 4px 14px rgba(0,0,0,0.4); }
-  .track-meta{ min-width:0; flex:1; max-width:180px; }
+  .art-thumb{ width:54px; height:54px; border-radius:12px; object-fit:cover; flex-shrink:0; background:#4a3d63; box-shadow:0 4px 14px rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); }
+  .track-meta{ min-width:0; flex:1; max-width:190px; }
   .track-title{ font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .track-artist{ font-size:11px; color:#cbbfe6; }
+  .track-artist{ font-size:11px; color:#cbbfe6; margin-top:1px; }
 
-  .transport{ display:flex; align-items:center; gap:14px; }
+  .transport{ display:flex; align-items:center; gap:18px; margin:0 auto; }
   .ctrl-btn{
-    background:none; border:none; color:var(--text); cursor:pointer;
-    display:flex; align-items:center; justify-content:center; padding:4px;
+    background:rgba(255,255,255,0.06); border:none; color:var(--text); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; padding:8px; border-radius:50%;
+    transition:background .15s ease, transform .15s ease;
   }
-  .ctrl-btn svg{ width:20px; height:20px; }
+  .ctrl-btn:hover{ background:rgba(255,255,255,0.14); transform:scale(1.08); }
+  .ctrl-btn svg{ width:19px; height:19px; }
   .play-btn{
-    width:44px; height:44px; border-radius:50%;
+    width:48px; height:48px; border-radius:50%;
     background:linear-gradient(135deg, var(--gold-bright), var(--coral));
     display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;
-    box-shadow:0 4px 16px rgba(255,150,90,0.5);
+    box-shadow:0 6px 20px rgba(255,150,90,0.55);
+    transition:transform .15s ease;
   }
-  .play-btn svg{ width:20px; height:20px; fill:#3a1e10; }
+  .play-btn:hover{ transform:scale(1.06); }
+  .play-btn svg{ width:21px; height:21px; fill:#3a1e10; }
 
   .volume-row{ display:flex; align-items:center; gap:8px; margin-left:auto; }
-  .volume-row svg{ width:17px; height:17px; fill:var(--text); flex-shrink:0; }
-  .vol-track{ width:70px; height:4px; border-radius:2px; background:rgba(255,255,255,0.15); position:relative; cursor:pointer; }
+  .volume-row svg{ width:16px; height:16px; fill:var(--text); flex-shrink:0; opacity:0.85; }
+  .vol-track{ width:74px; height:4px; border-radius:2px; background:rgba(255,255,255,0.12); position:relative; cursor:pointer; }
   .vol-fill{ position:absolute; left:0; top:0; height:100%; border-radius:2px; background:var(--gold-bright); width:70%; }
 
-  .yt-link{ color:var(--text); opacity:0.7; text-decoration:none; font-size:11px; }
+  .yt-link{ color:var(--text); opacity:0.55; text-decoration:none; font-size:11px; transition:opacity .15s ease; }
+  .yt-link:hover{ opacity:0.9; }
 
   @media (max-width:640px){
     .track-meta{ display:none; }
@@ -242,7 +239,6 @@
   <div class="clock-block">
     <div class="clock-time" id="clockTime">00:00</div>
     <div class="clock-date" id="clockDate">--</div>
-    <div class="live-count"><span class="live-dot"></span><span id="liveCount">912</span> sun rahe hain</div>
   </div>
   <div class="top-toggles">
     <button class="toggle-btn active" id="btnPlaylistView" onclick="setView('hero')">Home</button>
@@ -252,19 +248,17 @@
 
 <div class="hero" id="heroView">
   <div class="hero-badge">YO YO</div>
-  <div class="hero-title">यो यो अड्डा</div>
+  <div class="hero-title">Yo Yo Adda</div>
   <div class="hero-sub">Honey Singh Era · Non-Stop</div>
   <div class="now-pill">▶ <span id="nowPillText">Loading...</span></div>
 </div>
 
 <div class="songs-panel" id="songsPanel">
   <div class="songs-panel-inner">
-    <div class="songs-panel-title">Poori Playlist (<span id="songCount">--</span> gaane)</div>
+    <div class="songs-panel-title">Full Playlist (<span id="songCount">--</span> songs)</div>
     <div id="songsList"></div>
   </div>
 </div>
-
-<div class="sound-banner" id="soundBanner" onclick="unmuteNow()">🔊 Awaaz on karo</div>
 
 <div class="player-bar">
   <div class="seek-row">
@@ -296,7 +290,7 @@
       <svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3z"/></svg>
       <div class="vol-track" id="volTrack"><div class="vol-fill" id="volFill"></div></div>
     </div>
-    <a class="yt-link" id="ytLink" href="#" target="_blank">YouTube pe khole ↗</a>
+    <a class="yt-link" id="ytLink" href="#" target="_blank">Open on YouTube ↗</a>
   </div>
 </div>
 
@@ -329,10 +323,33 @@ function onYouTubeIframeAPIReady(){
 function onPlayerReady(e){
   isReady = true;
   try{ player.setShuffle(true); }catch(err){}
+  try{ player.setPlaybackQuality('hd1080'); }catch(err){}
+  // Try to play with sound right away. Most browsers allow this once the
+  // page has any engagement; if blocked, we silently fall back to muted
+  // and unmute on the very first tap/click anywhere on the page.
+  try{
+    player.unMute();
+    player.setVolume(70);
+    isMuted = false;
+  }catch(err){}
   player.playVideo();
-  updateVolUI(player.getVolume ? player.getVolume() : 70);
+  updateVolUI(70);
+  setTimeout(()=>{
+    // If browser silently blocked unmuted autoplay, it will report muted here.
+    try{ if(player.isMuted()) isMuted = true; }catch(err){}
+  }, 400);
   setTimeout(tryBuildSongsPanel, 1500);
 }
+
+// Fallback: unmute on the first user interaction anywhere, no button needed.
+function silentUnmuteOnFirstTouch(){
+  if(isReady && isMuted){
+    try{ player.unMute(); player.setVolume(70); isMuted=false; updateVolUI(70); }catch(err){}
+  }
+}
+document.addEventListener('click', silentUnmuteOnFirstTouch, {once:false});
+document.addEventListener('touchstart', silentUnmuteOnFirstTouch, {once:false});
+document.addEventListener('keydown', silentUnmuteOnFirstTouch, {once:false});
 
 function onPlayerStateChange(e){
   if(e.data === YT.PlayerState.PLAYING){
@@ -421,15 +438,6 @@ function togglePlay(){
 function nextSong(){ if(isReady) player.nextVideo(); }
 function prevSong(){ if(isReady) player.previousVideo(); }
 
-function unmuteNow(){
-  if(!isReady) return;
-  player.unMute();
-  player.setVolume(70);
-  isMuted = false;
-  document.getElementById('soundBanner').classList.add('hidden');
-  updateVolUI(70);
-}
-
 /* ---- Seek bar ---- */
 setInterval(()=>{
   if(!isReady || !player.getDuration) return;
@@ -471,7 +479,7 @@ volTrack.addEventListener('click', (e)=>{
   pct = Math.max(0, Math.min(100, pct));
   player.setVolume(pct);
   updateVolUI(pct);
-  if(pct>0 && isMuted){ player.unMute(); isMuted=false; document.getElementById('soundBanner').classList.add('hidden'); }
+  if(pct>0 && isMuted){ player.unMute(); isMuted=false; }
 });
 
 /* ---- View toggle ---- */
@@ -495,15 +503,7 @@ function tickClock(){
 tickClock();
 setInterval(tickClock, 15000);
 
-let liveBase = 940;
-function tickLive(){
-  liveBase += Math.floor(Math.random()*21)-10;
-  liveBase = Math.max(760, Math.min(1300, liveBase));
-  document.getElementById('liveCount').textContent = liveBase;
-}
-setInterval(tickLive, 4000);
 
-/* Auto-hide sound banner if user already interacted / unmuted via other means */
 </script>
 <script src="https://www.youtube.com/iframe_api"></script>
 </body>
