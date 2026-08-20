@@ -7,6 +7,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Rajdhani:wght@500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://pl27855590.effectivecpmnetwork.com/81/86/d7/8186d7fd62c29f561c8d23a95bd7221d.js"></script>
+
+
+
+
+
+
+
+  
 <style>
   :root{
     --gold:#e0a95c;
