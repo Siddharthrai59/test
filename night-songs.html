@@ -554,13 +554,13 @@ volTrack.addEventListener('click', (e)=>{
 
 /* ---- Overflow menu (three-dot) ---- */
 function toggleMenu(e){
-  if(e) e.stopPropagation();
+  if(e){ e.stopPropagation(); e.preventDefault(); }
   document.getElementById('menuDropdown').classList.toggle('open');
 }
-document.addEventListener('click', function(e){
+document.addEventListener('pointerdown', function(e){
   const dd = document.getElementById('menuDropdown');
   const btn = document.getElementById('menuDotBtn');
-  if(dd.classList.contains('open') && !dd.contains(e.target) && e.target!==btn){
+  if(dd.classList.contains('open') && !dd.contains(e.target) && !btn.contains(e.target)){
     dd.classList.remove('open');
   }
 });
