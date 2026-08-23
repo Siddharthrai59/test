@@ -7,17 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Rajdhani:wght@500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
-
-<script src="https://pl27855590.effectivecpmnetwork.com/81/86/d7/8186d7fd62c29f561c8d23a95bd7221d.js"></script>
-<script src="https://pl27856975.effectivecpmnetwork.com/0e/4b/18/0e4b185002c0946f1be225b85ebe12c3.js"></script>
-
-
-
-
-
-
-
-  
 <style>
   :root{
     --gold:#e0a95c;
@@ -69,6 +58,31 @@
   }
   .toggle-btn.active{ background:linear-gradient(135deg, var(--gold-bright), var(--coral)); color:#3a1e10; box-shadow:0 3px 12px rgba(255,150,90,0.4); }
   .toggle-btn:hover:not(.active){ background:rgba(255,255,255,0.08); }
+
+  .menu-wrap{ position:relative; }
+  .menu-dot-btn{
+    width:40px; height:40px; border-radius:50%; border:1px solid var(--panel-line);
+    background:rgba(20,14,32,0.55); backdrop-filter:blur(8px); color:var(--text);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition:background .2s ease;
+  }
+  .menu-dot-btn:hover{ background:rgba(255,255,255,0.1); }
+  .menu-dot-btn svg{ width:18px; height:18px; }
+  .menu-dropdown{
+    position:absolute; top:48px; right:0; min-width:190px;
+    background:rgba(26,19,40,0.92); backdrop-filter:blur(14px);
+    border:1px solid var(--panel-line); border-radius:14px;
+    padding:8px; display:none; flex-direction:column; gap:2px;
+    box-shadow:0 14px 30px rgba(0,0,0,0.45);
+  }
+  .menu-dropdown.open{ display:flex; }
+  .menu-item{
+    display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px;
+    color:var(--text); text-decoration:none; font-size:13.5px; font-weight:600;
+    cursor:pointer; transition:background .15s ease;
+  }
+  .menu-item:hover{ background:rgba(255,207,122,0.12); }
+  .menu-item svg{ width:16px; height:16px; flex-shrink:0; opacity:0.9; }
 
   /* ---------------- Hero ---------------- */
   .hero{
@@ -259,15 +273,31 @@
     <div class="clock-time" id="clockTime">00:00</div>
     <div class="clock-date" id="clockDate">--</div>
   </div>
-  <div class="top-toggles">
-    <button class="toggle-btn active" id="btnPlaylistView" onclick="setView('hero')">Home</button>
-    <button class="toggle-btn" id="btnSongsView" onclick="setView('songs')">All Songs</button>
+  <div style="display:flex; align-items:center; gap:10px;">
+    <div class="top-toggles">
+      <button class="toggle-btn active" id="btnPlaylistView" onclick="setView('hero')">Home</button>
+      <button class="toggle-btn" id="btnSongsView" onclick="setView('songs')">All Songs</button>
+    </div>
+    <div class="menu-wrap">
+      <button class="menu-dot-btn" id="menuDotBtn" onclick="toggleMenu()" title="More">
+        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+      </button>
+      <div class="menu-dropdown" id="menuDropdown">
+        <a class="menu-item" href="night-songs.html">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.1 2a10 10 0 1 0 9.9 11.7A9.9 9.9 0 0 1 12.1 2z"/></svg>
+          Night Songs
+        </a>
+        <!-- Add more site links here later, e.g.:
+        <a class="menu-item" href="sad-songs.html">Sad Songs</a>
+        -->
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="hero" id="heroView">
   <div class="hero-badge">YO YO</div>
-  <div class="hero-title">Yo Yo Honey Singh</div>
+  <div class="hero-title">Yo Yo Adda</div>
   <div class="hero-sub">Honey Singh Era · Non-Stop</div>
   <div class="now-pill"><span class="eq-bars"><span></span><span></span><span></span><span></span></span> <span id="nowPillText">Loading...</span></div>
 </div>
@@ -420,6 +450,26 @@ function refreshNowPlaying(){
     document.getElementById('artThumb').src = `https://img.youtube.com/vi/${currentVideoId}/hqdefault.jpg`;
     document.getElementById('ytLink').href = `https://www.youtube.com/watch?v=${currentVideoId}`;
     highlightPlayingRow();
+    updateMediaSession(title, currentVideoId);
+  }catch(err){}
+}
+
+function updateMediaSession(title, videoId){
+  if(!('mediaSession' in navigator)) return;
+  try{
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: title,
+      artist: 'Yo Yo Honey Singh',
+      album: 'Yo Yo Adda',
+      artwork: [
+        { src: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`, sizes:'480x360', type:'image/jpeg' },
+        { src: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`, sizes:'320x180', type:'image/jpeg' }
+      ]
+    });
+    navigator.mediaSession.setActionHandler('play', ()=>player.playVideo());
+    navigator.mediaSession.setActionHandler('pause', ()=>player.pauseVideo());
+    navigator.mediaSession.setActionHandler('nexttrack', ()=>nextSong());
+    navigator.mediaSession.setActionHandler('previoustrack', ()=>prevSong());
   }catch(err){}
 }
 
@@ -492,6 +542,19 @@ volTrack.addEventListener('click', (e)=>{
   player.setVolume(pct);
   updateVolUI(pct);
   if(pct>0 && isMuted){ player.unMute(); isMuted=false; }
+});
+
+/* ---- Overflow menu (three-dot) ---- */
+function toggleMenu(e){
+  if(e) e.stopPropagation();
+  document.getElementById('menuDropdown').classList.toggle('open');
+}
+document.addEventListener('click', function(e){
+  const dd = document.getElementById('menuDropdown');
+  const btn = document.getElementById('menuDotBtn');
+  if(dd.classList.contains('open') && !dd.contains(e.target) && e.target!==btn){
+    dd.classList.remove('open');
+  }
 });
 
 /* ---- View toggle ---- */
