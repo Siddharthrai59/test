@@ -356,7 +356,7 @@
    every video ID is guaranteed real and playable, no guessing needed. */
 const PLAYLIST_ID = "PL9bw4S5ePsEGx_-Jpy_xrC6JqIRCNYDZ9";
 
-let player, isReady=false, isMuted=true, isPlaying=false, currentVideoId="", playlistIds=[], panelBuilt=false;
+let player, isReady=false, isMuted=true, isPlaying=false, currentVideoId="", playlistIds=[], panelBuilt=false, userPaused=false;
 
 function onYouTubeIframeAPIReady(){
   player = new YT.Player('ytplayer', {
@@ -412,6 +412,28 @@ function onPlayerStateChange(e){
     player.nextVideo();
   }
 }
+
+// Watchdog: on desktop, very long ads can sometimes leave the player
+// paused/buffering afterwards instead of resuming the actual song.
+// If we're not playing, the user did NOT pause it themselves, and this
+// keeps happening for a few seconds straight, nudge it back to play.
+let stuckTicks = 0;
+setInterval(()=>{
+  if(!isReady) return;
+  const state = player.getPlayerState ? player.getPlayerState() : null;
+  const notPlaying = state !== YT.PlayerState.PLAYING;
+  if(notPlaying && !userPaused && state !== YT.PlayerState.CUED){
+    stuckTicks++;
+    if(stuckTicks === 6){ // ~3s of being stuck with no user pause
+      try{ player.playVideo(); }catch(err){}
+    }
+    if(stuckTicks === 12){ // still stuck ~6s later, try once more
+      try{ player.playVideo(); }catch(err){}
+    }
+  } else {
+    stuckTicks = 0;
+  }
+}, 500);
 
 function tryBuildSongsPanel(){
   if(panelBuilt) return;
@@ -499,7 +521,8 @@ function setPlayIcon(playing){
 
 function togglePlay(){
   if(!isReady) return;
-  if(isPlaying){ player.pauseVideo(); } else { player.playVideo(); }
+  if(isPlaying){ userPaused = true; player.pauseVideo(); }
+  else { userPaused = false; player.playVideo(); }
 }
 function nextSong(){ if(isReady) player.nextVideo(); }
 function prevSong(){ if(isReady) player.previousVideo(); }
